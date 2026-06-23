@@ -390,39 +390,210 @@ section{
 
     border-radius:20px;
 }
-
 /* =========================
-   ABOUT CARD
+   ABOUT SECTION
 ========================= */
 
-.about-card{
+#about{
 
-    background:
-    rgba(255,255,255,0.06);
+    padding:70px 0;
 
-    backdrop-filter:
-    blur(15px);
+    position:relative;
 
-    border:
-    1px solid rgba(255,255,255,0.1);
+}
+
+#about .container{
+
+    max-width:1000px;
+
+}
+
+/* Heading */
+
+#about .section-title{
+
+    font-size:3rem;
+
+    font-weight:700;
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+    color:#fff;
+
+}
+
+#about .line{
+
+    width:80px;
+    height:4px;
+
+    background:#38bdf8;
+
+    margin:0 auto 50px;
 
     border-radius:20px;
 
-    padding:30px;
 }
 
-.about-card ul{
+/* About Content */
 
-    list-style:none;
+#about h3{
 
-    padding-left:0;
+    text-align:center;
+
+    font-size:2.5rem;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+    color:#ffffff;
+
 }
 
-.about-card li{
+#about p{
 
-    margin-bottom:15px;
+    max-width:850px;
+
+    margin:auto;
+
+    text-align:center;
+
+    font-size:1.2rem;
+
+    line-height:2;
+
+    color:#cbd5e1;
+
+    letter-spacing:.3px;
+
 }
 
+/* Glass Card Effect */
+
+#about .about-content{
+
+    background:
+    rgba(255,255,255,.05);
+
+    backdrop-filter:
+    blur(20px);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:25px;
+
+    padding:50px;
+
+    transition:.4s;
+
+}
+
+#about .about-content:hover{
+
+    transform:
+    translateY(-8px);
+
+    box-shadow:
+    0 15px 40px rgba(56,189,248,.15);
+
+}
+
+/* Decorative Glow */
+
+#about::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    background:
+    rgba(56,189,248,.08);
+
+    border-radius:50%;
+
+    top:-50px;
+    left:10%;
+
+    filter:blur(40px);
+
+    z-index:-1;
+
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    #about{
+
+        padding:50px 20px;
+
+    }
+
+    #about .section-title{
+
+        font-size:2.3rem;
+
+    }
+
+    #about h3{
+
+        font-size:2rem;
+
+    }
+
+    #about p{
+
+        font-size:1rem;
+
+        line-height:1.8;
+
+    }
+
+    #about .about-content{
+
+        padding:30px;
+
+    }
+
+}
+
+
+.info-card{
+
+padding:12px 20px;
+
+border-radius:30px;
+
+background:
+rgba(56,189,248,.1);
+
+border:
+1px solid rgba(56,189,248,.25);
+
+color:#38bdf8;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.info-card:hover{
+
+transform:translateY(-5px);
+
+background:
+rgba(56,189,248,.2);
+
+}
 /* =========================
    SKILL CARDS
 ========================= */
@@ -533,68 +704,191 @@ section{
 
     margin-bottom:15px;
 }
-
 /* =========================
-   CONTACT
+   CONTACT SECTION
 ========================= */
 
-form{
-
-    max-width:700px;
-
-    margin:auto;
+#contact{
+    padding:80px 0;
+    position:relative;
 }
 
-.form-control{
+.contact-wrapper{
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:40px;
+    align-items:center;
+}
 
-    background:
-    rgba(255,255,255,.08);
+/* Left Side */
+
+.contact-info{
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:25px;
+    padding:35px;
+}
+
+.contact-info h3{
+    color:#38bdf8;
+    margin-bottom:20px;
+}
+
+.contact-item{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.contact-item i{
+    width:50px;
+    height:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background:rgba(56,189,248,.15);
+    color:#38bdf8;
+    font-size:20px;
+}
+
+.contact-item span{
+    color:#cbd5e1;
+}
+
+/* Form Card */
+
+.contact-form{
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:25px;
+    padding:40px;
+}
+
+/* Inputs */
+
+.contact-form .form-control{
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid transparent;
+
+    color:white;
+
+    padding:15px 20px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    transition:.3s;
+}
+
+.contact-form .form-control:focus{
+
+    border-color:#38bdf8;
+
+    box-shadow:
+    0 0 15px rgba(56,189,248,.35);
+
+    background:rgba(255,255,255,.10);
+
+    color:white;
+}
+
+.contact-form textarea{
+    min-height:180px;
+    resize:none;
+}
+
+/* Button */
+
+.send-btn{
+
+    width:100%;
+
+    padding:15px;
 
     border:none;
 
-    color:white;
+    border-radius:15px;
 
-    padding:15px;
-}
+    font-size:18px;
 
-.form-control:focus{
+    font-weight:600;
 
     background:
-    rgba(255,255,255,.10);
+    linear-gradient(
+    135deg,
+    #38bdf8,
+    #2563eb
+    );
 
     color:white;
-
-    box-shadow:
-    0 0 15px rgba(56,189,248,.5);
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-
-    background:#010409;
-
-    padding:40px 0;
-}
-
-.footer-icons a{
-
-    color:white;
-
-    font-size:24px;
-
-    margin:0 10px;
 
     transition:.4s;
 }
 
-.footer-icons a:hover{
+.send-btn:hover{
 
-    color:#38bdf8;
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 15px 30px
+    rgba(56,189,248,.35);
 }
 
+/* Social Icons */
+
+.contact-social{
+
+    margin-top:30px;
+}
+
+.contact-social a{
+
+    display:inline-flex;
+
+    width:45px;
+    height:45px;
+
+    justify-content:center;
+    align-items:center;
+
+    border-radius:50%;
+
+    background:rgba(56,189,248,.15);
+
+    color:#38bdf8;
+
+    margin-right:10px;
+
+    transition:.3s;
+}
+
+.contact-social a:hover{
+
+    transform:translateY(-5px);
+
+    background:#38bdf8;
+
+    color:white;
+}
+
+/* Mobile */
+
+@media(max-width:992px){
+
+.contact-wrapper{
+
+grid-template-columns:1fr;
+
+}
+
+}
 /* =========================
    BACK TO TOP
 ========================= */
@@ -661,40 +955,185 @@ margin-top:40px;
 
 }
 
+/* ===================
+   EXPERIENCE
+=================== */
+
+#experience{
+
+padding:40px 0;
+
+}
+
+.experience-subtitle{
+
+color:#94a3b8;
+margin-bottom:30px;
+
+}
+
+.experience-wrapper{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(280px,1fr));
+
+gap:30px;
+
+margin-top:15px;
+
+}
 
 .experience-card{
 
-    background:rgba(255,255,255,.06);
+background:
+rgba(255,255,255,.05);
 
-    backdrop-filter:blur(20px);
+backdrop-filter:
+blur(20px);
 
-    border:1px solid rgba(255,255,255,.1);
+border:
+1px solid rgba(255,255,255,.08);
 
-    padding:30px;
+padding:12px;
 
-    border-radius:20px;
+border-radius:25px;
 
-    transition:.4s;
+transition:.4s;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.experience-card::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:0;
+
+width:100%;
+height:2px;
+
+background:
+linear-gradient(
+90deg,
+#38bdf8,
+#6366f1
+);
+
 }
 
 .experience-card:hover{
 
-    transform:translateY(-10px);
+transform:
+translateY(-12px);
 
-    box-shadow:
-    0 0 25px rgba(56,189,248,.5);
+box-shadow:
+0 15px 40px
+rgba(56,189,248,.25);
+
+}
+
+.exp-icon{
+
+font-size:40px;
+
+margin-bottom:20px;
+
 }
 
 .experience-card h4{
 
-    color:#38bdf8;
+color:#38bdf8;
 
-    margin-bottom:15px;
+font-weight:700;
+
+margin-bottom:4px;
+
+}
+
+.experience-card h6{
+
+color:#cbd5e1;
+
+margin-bottom:15px;
+
 }
 
 .experience-card span{
 
-    font-weight:600;
+display:inline-block;
+
+padding:6px 8px;
+
+border-radius:20px;
+
+background:
+rgba(56,189,248,.15);
+
+color:#38bdf8;
+
+font-size:14px;
+
+margin-bottom:10px;
+
+}
+
+.experience-card p{
+
+line-height:1.8;
+
+color:#e2e8f0;
+
+}
+/* =========================
+   THEME BUTTON
+========================= */
+
+.theme-btn{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+    outline:none;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
 
     color:#38bdf8;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.35s ease;
+
+    font-size:18px;
+}
+
+.theme-btn:hover{
+
+    background:#38bdf8;
+
+    color:#fff;
+
+    transform:rotate(180deg) scale(1.1);
+
+    box-shadow:
+    0 0 20px rgba(56,189,248,.5);
+}
+
+.theme-btn i{
+
+    pointer-events:none;
 }

@@ -137,14 +137,55 @@ topBtn.addEventListener("click", () => {
 
 // Contact Form
 
-document
-.getElementById("contactForm")
-.addEventListener("submit", function (e) {
+const contactForm =
+document.getElementById("contactForm");
 
-    e.preventDefault();
+if(contactForm){
 
-    alert("Thank You! Message Sent Successfully 🚀");
+    contactForm.addEventListener(
+        "submit",
+        function(e){
 
-    this.reset();
+            e.preventDefault();
 
-});
+            alert(
+                "Thank You! Message Sent Successfully 🚀"
+            );
+
+            this.reset();
+
+        }
+    );
+
+}
+/* =========================
+   DARK / LIGHT MODE
+========================= */
+const themeBtn = document.getElementById("theme-btn");
+
+if(themeBtn){
+
+    const icon = themeBtn.querySelector("i");
+
+    themeBtn.addEventListener("click",()=>{
+
+        document.body.classList.toggle("light-mode");
+
+        if(document.body.classList.contains("light-mode")){
+
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
+
+            localStorage.setItem("theme","light");
+
+        }else{
+
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+
+            localStorage.setItem("theme","dark");
+        }
+
+    });
+
+}
