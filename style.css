@@ -661,149 +661,40 @@ margin-top:40px;
 
 }
 
-/* =========================
-   TIMELINE
-========================= */
 
-.timeline{
+.experience-card{
 
-    position:relative;
-    max-width:1200px;
-    margin:auto;
-}
+    background:rgba(255,255,255,.06);
 
-.timeline::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:4px;
-
-    background:#38bdf8;
-
-    top:0;
-    bottom:0;
-
-    left:50%;
-
-    margin-left:-2px;
-}
-
-.timeline-item{
-
-    padding:20px 40px;
-
-    position:relative;
-
-    width:50%;
-}
-
-.timeline-item.left{
-    left:0;
-}
-
-.timeline-item.right{
-    left:50%;
-}
-
-.timeline-content{
-
-    background:
-    rgba(255,255,255,.06);
-
-    backdrop-filter:blur(15px);
-
-    padding:25px;
-
-    border-radius:20px;
+    backdrop-filter:blur(20px);
 
     border:1px solid rgba(255,255,255,.1);
-
-    transition:.4s;
-}
-
-.timeline-content:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:
-    0 0 25px rgba(56,189,248,.4);
-}
-
-.timeline-item::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:20px;
-    height:20px;
-
-    background:#38bdf8;
-
-    border-radius:50%;
-
-    top:35px;
-
-    right:-10px;
-
-    z-index:2;
-}
-
-.timeline-item.right::after{
-
-    left:-10px;
-}
-
-@media(max-width:768px){
-
-.timeline::after{
-left:20px;
-}
-
-.timeline-item{
-
-width:100%;
-padding-left:60px;
-padding-right:20px;
-}
-
-.timeline-item.right{
-left:0;
-}
-
-.timeline-item::after{
-left:10px;
-}
-
-}
-
-/* =========================
-   GITHUB
-========================= */
-
-.github-card{
-
-    background:
-    rgba(255,255,255,.05);
 
     padding:30px;
 
     border-radius:20px;
 
-    text-align:center;
-
-    backdrop-filter:blur(20px);
+    transition:.4s;
 }
 
-.github-card img{
+.experience-card:hover{
 
-    width:100%;
+    transform:translateY(-10px);
 
-    border-radius:15px;
+    box-shadow:
+    0 0 25px rgba(56,189,248,.5);
+}
 
-    background:white;
+.experience-card h4{
 
-    padding:20px;
+    color:#38bdf8;
+
+    margin-bottom:15px;
+}
+
+.experience-card span{
+
+    font-weight:600;
+
+    color:#38bdf8;
 }
