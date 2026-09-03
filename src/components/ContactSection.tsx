@@ -63,11 +63,47 @@ export const ContactSection: React.FC = () => {
               </motion.div>
 
               <p
-                className="text-xs sm:text-[13px] font-light text-[#A8988B] leading-relaxed max-w-md"
+                className="text-xs sm:text-[13px] font-light text-[#A8988B] leading-relaxed max-w-md mb-8"
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
               >
-                Have an ambitious system to architect, an engineering opportunity, or a collaborative inquiry? Send a direct dispatch below.
+                Have an ambitious system to architect, an engineering opportunity, or a collaborative inquiry? Send a direct dispatch below or reach out via direct channels.
               </p>
+
+              {/* Contact Info Items */}
+              <div className="space-y-4 text-xs font-mono tracking-wider text-[#C4B5A5] mb-8">
+                <div className="flex items-center space-x-3">
+                  <span className="text-[#D4AF37]">✉</span>
+                  <a href="mailto:venky995982@gmail.com" className="hover:text-white transition-colors">venky995982@gmail.com</a>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-[#D4AF37]">☎</span>
+                  <a href="tel:+919959826841" className="hover:text-white transition-colors">+91 99598 26841</a>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-[#D4AF37]">📍</span>
+                  <span>Vijayawada, Andhra Pradesh</span>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex items-center space-x-4 pt-4 border-t border-[#8C6D4F]/20">
+                <a
+                  href="https://github.com/Venky9959-code"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 border border-[#8C6D4F]/40 hover:border-[#D4AF37] text-[11px] font-mono tracking-widest text-[#E8DFD8] hover:text-[#D4AF37] transition-all"
+                >
+                  GITHUB ↗
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/venky-banavathu-2377082a3"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 border border-[#8C6D4F]/40 hover:border-[#D4AF37] text-[11px] font-mono tracking-widest text-[#E8DFD8] hover:text-[#D4AF37] transition-all"
+                >
+                  LINKEDIN ↗
+                </a>
+              </div>
             </div>
           </div>
 
@@ -167,10 +203,10 @@ export const ContactSection: React.FC = () => {
         {/* System Footer Line */}
         <div className="pt-16 mt-16 border-t border-[#8C6D4F]/15 flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4">
           <span className="text-[10px] font-mono tracking-widest text-[#8C6D4F] uppercase">
-            PORTFOLIO // EDITION 2026
+            PORTFOLIO // BANAVATHU VENKATESWARA RAO
           </span>
           <span className="text-[10px] font-mono text-[#8C6D4F]">
-            © {new Date().getFullYear()} • ENGINEERED WITH PRECISION
+            © {new Date().getFullYear()} BANAVATHU VENKATESWARA RAO • ALL RIGHTS RESERVED
           </span>
         </div>
 

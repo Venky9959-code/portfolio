@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import watermarkImg from '../assets/watermark.png';
+import heroPortrait from '../assets/hero-portrait.jpg';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -36,19 +37,70 @@ const navItems = [
 ];
 
 export const HeroSection: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
 
+  // Mouse position values for 3D physics
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springMouseX = useSpring(mouseX, { stiffness: 160, damping: 24 });
+  const springMouseY = useSpring(mouseY, { stiffness: 160, damping: 24 });
+
+  // Scroll tracking for hero section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Buttery-smooth spring for scroll rotation
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 26,
+    restDelta: 0.001,
+  });
+
+  // Scroll turn transforms (turns dynamically as user scrolls down)
+  const scrollRotateY = useTransform(smoothProgress, [0, 0.5, 1], [0, 22, 40]);
+  const scrollRotateX = useTransform(smoothProgress, [0, 1], [0, -8]);
+  const scrollTranslateZ = useTransform(smoothProgress, [0, 1], [0, -120]);
+  const scrollY = useTransform(smoothProgress, [0, 1], [0, 120]);
+  const scrollScale = useTransform(smoothProgress, [0, 0.6, 1], [1, 0.98, 0.92]);
+  const scrollOpacity = useTransform(smoothProgress, [0, 0.85, 1], [1, 0.92, 0]);
+
+  // Interactive mouse tilt transforms
+  const mouseRotateY = useTransform(springMouseX, [-0.5, 0.5], [-9, 9]);
+  const mouseRotateX = useTransform(springMouseY, [-0.5, 0.5], [7, -7]);
+
+  // Combined rotation: scroll turning + interactive tilt
+  const rotateY = useTransform(
+    [scrollRotateY, mouseRotateY],
+    ([sRot, mRot]) => (sRot as number) + (mRot as number)
+  );
+  const rotateX = useTransform(
+    [scrollRotateX, mouseRotateX],
+    ([sRot, mRot]) => (sRot as number) + (mRot as number)
+  );
+
+  // Dynamic light sheen position responding to scroll turn
+  const sheenTranslateX = useTransform(smoothProgress, [0, 1], ['-60%', '140%']);
+
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleWindowMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
+      const { innerWidth, innerHeight } = window;
+      mouseX.set(e.clientX / innerWidth - 0.5);
+      mouseY.set(e.clientY / innerHeight - 0.5);
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    window.addEventListener('mousemove', handleWindowMouseMove);
+    return () => window.removeEventListener('mousemove', handleWindowMouseMove);
+  }, [mouseX, mouseY]);
 
   return (
-    <section className="relative w-screen h-screen overflow-hidden bg-black text-[#E8DFD8] font-sans selection:bg-[#cbb59d] selection:text-black cursor-none">
+    <section
+      ref={sectionRef}
+      className="relative w-screen h-screen overflow-hidden bg-black text-[#E8DFD8] font-sans selection:bg-[#cbb59d] selection:text-black cursor-none"
+    >
       {/* ================= 1. MINIMAL CUSTOM CURSOR ================= */}
       {cursorPos.x >= 0 && (
         <motion.div
@@ -64,29 +116,68 @@ export const HeroSection: React.FC = () => {
         />
       )}
 
-      {/* ================= 2. FIXED VIDEO LAYER ================= */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-black flex items-center justify-end">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="h-screen w-auto max-w-none object-contain origin-right scale-95 md:scale-[0.98] lg:scale-100"
-        >
-          <source src="/videos/hero.mp4" type="video/mp4" />
-        </video>
+      {/* ================= 2. ANIMATABLE 3D HERO PORTRAIT LAYER ================= */}
+      <div
+        className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-black flex items-end justify-end pr-2 sm:pr-6 md:pr-10 lg:pr-16 xl:pr-24"
+        style={{ perspective: 1200, perspectiveOrigin: '75% 60%' }}
+      >
+        {/* Ambient Backlight Halo */}
+        <motion.div
+          animate={{
+            scale: [1, 1.08, 1],
+            opacity: [0.22, 0.35, 0.22],
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute right-12 lg:right-32 top-1/2 -translate-y-1/2 w-[34rem] h-[34rem] bg-gradient-to-tr from-[#D4AF37]/25 via-[#9B7640]/15 to-transparent rounded-full blur-[130px] pointer-events-none"
+        />
 
-        {/* Seamless Soft Left Edge Blend */}
-        <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-black via-black/85 to-transparent pointer-events-none" />
+        {/* 3D Scroll & Mouse Animatable Wrapper */}
+        <motion.div
+          style={{
+            rotateY,
+            rotateX,
+            z: scrollTranslateZ,
+            y: scrollY,
+            scale: scrollScale,
+            opacity: scrollOpacity,
+            transformStyle: 'preserve-3d',
+          }}
+          className="relative flex items-end justify-center origin-bottom pointer-events-none"
+        >
+          {/* Portrait Image */}
+          <div className="relative overflow-hidden flex items-end">
+            <img
+              src={heroPortrait}
+              alt="Venkateswara Rao"
+              className="h-[86vh] sm:h-[90vh] md:h-[93vh] lg:h-[97vh] w-auto max-w-none object-contain object-bottom select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
+              draggable={false}
+            />
+
+            {/* Dynamic Specular Sheen on Scroll Turn */}
+            <motion.div
+              style={{ x: sheenTranslateX }}
+              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#FFF7E8]/12 to-transparent skew-x-[-20deg] pointer-events-none"
+            />
+          </div>
+
+          {/* Seamless Soft Left Edge Blend */}
+          <div className="absolute inset-y-0 -left-24 w-56 lg:w-80 bg-gradient-to-r from-black via-black/85 to-transparent pointer-events-none" />
+
+          {/* Seamless Bottom Edge Blend */}
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+
+          {/* Subtle Top Spotlight Vignette */}
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+        </motion.div>
 
         {/* ================= 3. ANIMATED WATERMARK EMBLEM ================= */}
-        <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-12 pointer-events-none flex items-center justify-center z-10">
+        <div className="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 pointer-events-none flex items-center justify-center z-10">
           <div className="relative flex items-center justify-center">
-            <div className="absolute w-36 h-36 bg-black/85 rounded-full blur-xl" />
+            <div className="absolute w-24 h-24 bg-black/85 rounded-full blur-lg" />
 
             <motion.div
               animate={{
-                y: [-3, 3, -3],
+                y: [-2, 2, -2],
                 scale: [1, 1.03, 1],
               }}
               transition={{
@@ -99,7 +190,7 @@ export const HeroSection: React.FC = () => {
               <img
                 src={watermarkImg}
                 alt="Insignia"
-                className="w-28 h-28 lg:w-32 lg:h-32 object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.25)]"
+                className="w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-[0_0_12px_rgba(212,175,55,0.25)] opacity-85"
               />
             </motion.div>
           </div>
@@ -108,7 +199,7 @@ export const HeroSection: React.FC = () => {
 
       {/* ================= 4. CONTENT LAYER ================= */}
       <div className="relative z-10 flex flex-col justify-between h-full w-full px-6 sm:px-12 lg:px-16 pt-6 pb-8 pointer-events-none">
-        
+
         {/* Navigation Bar */}
         <header className="relative flex items-center justify-between w-full pointer-events-auto">
           <a
@@ -118,7 +209,7 @@ export const HeroSection: React.FC = () => {
             className="text-xs sm:text-sm font-semibold tracking-[0.35em] uppercase text-[#EAD8C7] hover:opacity-75 transition-opacity"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
-            LOHITHA.
+            VRAO.
           </a>
 
           {/* Navigation Links */}
@@ -157,7 +248,7 @@ export const HeroSection: React.FC = () => {
 
         {/* Main Hero Row */}
         <div className="relative flex flex-col md:flex-row items-center justify-between w-full pt-4 pb-2 my-auto">
-          
+
           {/* LEFT: Balanced Headline & Actions */}
           <motion.div
             variants={containerVariants}
@@ -194,7 +285,7 @@ export const HeroSection: React.FC = () => {
                 className="text-[10px] sm:text-[11px] md:text-xs font-normal tracking-[0.28em] uppercase text-[#C4B29E]"
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
               >
-                FULL STACK DEVELOPER <span className="text-[#8C6D4F] mx-1">•</span> UI/UX DESIGNER <span className="text-[#8C6D4F] mx-1">•</span> DATA SCIENCE
+                FULL STACK DEVELOPER <span className="text-[#8C6D4F] mx-1">•</span> CSE ENGINEER <span className="text-[#8C6D4F] mx-1">•</span> FOUNDER OF SKILLSBOOSTHUB
               </p>
             </motion.div>
 
@@ -205,9 +296,9 @@ export const HeroSection: React.FC = () => {
               style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
               <p>
-                I turn bold ideas into seamless digital experiences.
+                Computer Science Engineer & Full Stack Developer.
                 <br />
-                Where frontend meets powerful backend, and code transforms vision into impact.
+                Founder of SkillsBoostHub — building future-ready skills & digital solutions.
               </p>
             </motion.div>
 
@@ -250,12 +341,12 @@ export const HeroSection: React.FC = () => {
             </motion.div>
           </motion.div>
 
-          {/* RIGHT: Floating Quote & Signature Card */}
+          {/* FLOATING: Quote & Signature Card (Positioned in open space between headline and portrait) */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: -15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex flex-col items-start pointer-events-auto pr-24 xl:pr-36 mr-4 z-20 select-none"
+            className="hidden xl:flex flex-col items-start pointer-events-auto absolute left-[50%] 2xl:left-[48%] top-[52%] -translate-y-1/2 z-20 select-none backdrop-blur-[2px] py-3 px-4 rounded-lg border border-[#8C6D4F]/20 bg-black/25"
           >
             {/* 1. Quote Mark */}
             <span className="text-xl text-[#C99E5D] leading-none font-serif mb-2">
@@ -263,7 +354,7 @@ export const HeroSection: React.FC = () => {
             </span>
 
             {/* 2. Compact Two-Line Statement */}
-            <div 
+            <div
               className="text-[9.5px] font-medium tracking-[0.24em] uppercase text-[#E0D3C5] space-y-1 mb-3"
               style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
@@ -275,14 +366,14 @@ export const HeroSection: React.FC = () => {
             <div className="w-28 h-[1px] bg-gradient-to-r from-[#D4AF37] via-[#E8D7C5]/70 to-transparent shadow-[0_0_8px_rgba(212,175,55,0.4)] mb-2" />
 
             {/* 4. Fine Monoline Calligraphy Signature */}
-            <div 
+            <div
               className="text-[2.2rem] text-[#D8AB64] font-normal leading-none -ml-0.5"
-              style={{ 
+              style={{
                 fontFamily: "'Herr Von Muellerhoff', 'Allura', cursive",
                 letterSpacing: '0.04em',
               }}
             >
-              Lohitha
+              Venkateswararao
             </div>
           </motion.div>
         </div>
